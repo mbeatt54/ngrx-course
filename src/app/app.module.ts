@@ -1,4 +1,5 @@
 import { RouterModule, Routes } from '@angular/router';
+import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { metaReducers, reducers } from './reducers';
 
 import { AppComponent } from './app.component';
@@ -42,9 +43,21 @@ const routes: Routes = [
     MatListModule,
     MatToolbarModule,
     AuthModule.forRoot(),
-    StoreModule.forRoot(reducers, { metaReducers }),
+    StoreModule.forRoot(reducers, {
+      metaReducers,
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true,
+        strictActionSerializability: true,
+        strictStateSerializability: true,
+      },
+    }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     EffectsModule.forRoot([]),
+    StoreRouterConnectingModule.forRoot({
+      stateKey: 'router',
+      routerState: RouterState.Minimal,
+    }),
   ],
   bootstrap: [AppComponent],
 })
