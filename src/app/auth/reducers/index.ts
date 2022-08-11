@@ -14,7 +14,6 @@ import { User } from '../model/user.model';
 import { login } from '../auth.actions';
 
 export const authFeatureKey = 'auth';
-
 export interface AuthState {
   user: User;
 }
@@ -29,5 +28,8 @@ export const authReducer = createReducer(
     return {
       user: action.user,
     };
+  }),
+  on(AuthActions.logout, (state, action) => {
+    return { user: undefined };
   })
 );

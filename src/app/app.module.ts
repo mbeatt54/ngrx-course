@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
 
 import { AppComponent } from './app.component';
+import { AuthGuard } from './auth/auth.guard';
 import { AuthModule } from './auth/auth.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
@@ -25,6 +26,7 @@ const routes: Routes = [
   {
     path: 'courses',
     loadChildren: () => import('./courses/courses.module').then((m) => m.CoursesModule),
+    canActivate: [AuthGuard],
   },
   { path: '**', redirectTo: '/' },
 ];
@@ -45,6 +47,7 @@ const routes: Routes = [
     AuthModule.forRoot(),
     StoreModule.forRoot(fromAppState.reducers, { metaReducers: fromAppState.metaReducers }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    EffectsModule.forRoot([]),
   ],
   bootstrap: [AppComponent],
 })
