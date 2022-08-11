@@ -1,0 +1,9 @@
+import { ActionReducer, ActionReducerMap, MetaReducer, createFeatureSelector, createSelector } from '@ngrx/store';
+
+import { environment } from '../../environments/environment';
+
+export interface AppState {}
+
+export const reducers: ActionReducerMap<AppState> = {};
+
+export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [] : [];

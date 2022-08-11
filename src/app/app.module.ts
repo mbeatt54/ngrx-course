@@ -1,3 +1,5 @@
+import * as fromAppState from './reducers';
+
 import { RouterModule, Routes } from '@angular/router';
 import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
 
@@ -24,10 +26,7 @@ const routes: Routes = [
     path: 'courses',
     loadChildren: () => import('./courses/courses.module').then((m) => m.CoursesModule),
   },
-  {
-    path: '**',
-    redirectTo: '/',
-  },
+  { path: '**', redirectTo: '/' },
 ];
 
 @NgModule({
@@ -44,7 +43,7 @@ const routes: Routes = [
     MatListModule,
     MatToolbarModule,
     AuthModule.forRoot(),
-    StoreModule.forRoot({}, {}),
+    StoreModule.forRoot(fromAppState.reducers, { metaReducers: fromAppState.metaReducers }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
   ],
   bootstrap: [AppComponent],
