@@ -57,6 +57,7 @@ const routes: Routes = [
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot({ stateKey: 'router', routerState: RouterState.Minimal }),
+    EntityDataModule.forRoot({}),
   ],
   bootstrap: [AppComponent],
 })

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { AppState } from '../../reducers';
@@ -6,7 +6,6 @@ import { AuthActions } from '../action-types';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { login } from '../auth.actions';
 import { noop } from 'rxjs';
 import { tap } from 'rxjs/operators';
 

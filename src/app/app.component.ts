@@ -6,7 +6,6 @@ import { isLoggedIn, isLoggedOut } from './auth/auth.selectors';
 import { AppState } from './reducers';
 import { AuthActions } from './auth/action-types';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',

@@ -1,17 +1,15 @@
-import { Course, compareCourses } from './model/course';
 import { EntityDataService, EntityDefinitionService, EntityMetadataMap } from '@ngrx/data';
-import { Lesson, compareLessons } from './model/lesson';
 import { RouterModule, Routes } from '@angular/router';
 
 import { CommonModule } from '@angular/common';
 import { CourseComponent } from './course/course.component';
+import { CourseDataService } from './services/course-data.service';
+import { CourseEntityService } from './services/course-entity.service';
 import { CoursesCardListComponent } from './courses-card-list/courses-card-list.component';
-import { CoursesEffects } from './courses.effects';
-import { CoursesHttpService } from './services/courses-http.service';
 import { CoursesResolver } from './courses.resolver';
 import { EditCourseDialogComponent } from './edit-course-dialog/edit-course-dialog.component';
-import { EffectsModule } from '@ngrx/effects';
 import { HomeComponent } from './home/home.component';
+import { LessonEntityService } from './services/lesson-entity.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -28,8 +26,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { StoreModule } from '@ngrx/store';
-import { coursesReducer } from './reducers/course.reducers';
+import { compareCourses } from './model/course';
+import { compareLessons } from './model/lesson';
 
 export const coursesRoutes: Routes = [
   {
@@ -39,8 +37,20 @@ export const coursesRoutes: Routes = [
       courses: CoursesResolver,
     },
   },
-  { path: ':courseUrl', component: CourseComponent },
+  { path: ':courseUrl', component: CourseComponent, resolve: { courses: CoursesResolver } },
 ];
+
+const entityMetaData: EntityMetadataMap = {
+  Course: {
+    sortComparer: compareCourses,
+    entityDispatcherOptions: {
+      optimisticUpdate: true,
+    },
+  },
+  Lesson: {
+    sortComparer: compareLessons,
+  },
+};
 
 @NgModule({
   imports: [
@@ -61,14 +71,19 @@ export const coursesRoutes: Routes = [
     MatMomentDateModule,
     ReactiveFormsModule,
     RouterModule.forChild(coursesRoutes),
-    EffectsModule.forFeature([CoursesEffects]),
-    StoreModule.forFeature('courses', coursesReducer),
   ],
   declarations: [HomeComponent, CoursesCardListComponent, EditCourseDialogComponent, CourseComponent],
   exports: [HomeComponent, CoursesCardListComponent, EditCourseDialogComponent, CourseComponent],
   entryComponents: [EditCourseDialogComponent],
-  providers: [CoursesHttpService, CoursesResolver],
+  providers: [CoursesResolver, CourseEntityService, CourseDataService, LessonEntityService],
 })
 export class CoursesModule {
-  constructor() {}
+  constructor(
+    private entityDefinitionService: EntityDefinitionService,
+    private entityDataService: EntityDataService,
+    private coursesDataService: CourseDataService
+  ) {
+    entityDefinitionService.registerMetadataMap(entityMetaData);
+    entityDataService.registerService('Course', coursesDataService);
+  }
 }
